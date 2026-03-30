@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "SentinelAI",
+  "version": "1.0",
+  "description": "Detects and sanitizes structured sensitive data in LLM prompts before submission.",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": [
+    "https://chat.openai.com/*",
+    "https://chatgpt.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*"
+      ],
+      "js": ["content.js"],
+      "css": ["style.css"]
+    }
+  ]
+}
