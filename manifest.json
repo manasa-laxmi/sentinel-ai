@@ -1,21 +1,39 @@
 {
   "manifest_version": 3,
   "name": "SentinelAI",
-  "version": "1.0",
-  "description": "Detects and sanitizes structured sensitive data in LLM prompts before submission.",
-  "permissions": ["activeTab", "scripting"],
-  "host_permissions": [
-    "https://chat.openai.com/*",
-    "https://chatgpt.com/*"
-  ],
+  "version": "2.0.0",
+  "description": "Stops passwords, API keys, card numbers and other personal data from reaching AI chatbots. Runs entirely on your device.",
+  "permissions": ["storage"],
+  "background": { "service_worker": "src/background.js" },
+  "action": {
+    "default_popup": "pages/popup.html",
+    "default_title": "SentinelAI",
+    "default_icon": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" }
+  },
+  "options_ui": { "page": "pages/options.html", "open_in_tab": true },
+  "icons": { "16": "icons/icon16.png", "32": "icons/icon32.png", "48": "icons/icon48.png", "128": "icons/icon128.png" },
   "content_scripts": [
     {
       "matches": [
+        "https://chatgpt.com/*",
         "https://chat.openai.com/*",
-        "https://chatgpt.com/*"
+        "https://gemini.google.com/*",
+        "https://claude.ai/*",
+        "https://www.perplexity.ai/*",
+        "https://perplexity.ai/*",
+        "https://copilot.microsoft.com/*"
       ],
-      "js": ["content.js"],
-      "css": ["style.css"]
+      "js": [
+        "src/settings.js",
+        "src/detectors.js",
+        "src/adapters.js",
+        "src/editor.js",
+        "src/ui.js",
+        "src/content.js"
+      ],
+      "css": ["src/highlight.css"],
+      "run_at": "document_start",
+      "all_frames": false
     }
   ]
 }
