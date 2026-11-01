@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How SentinelAI works</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wrap { max-width: 760px; margin: 0 auto; padding: 40px 16px 72px; }
+    .hero { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 28px; }
+    .hero .logo { width: 44px; height: 44px; border-radius: 12px; }
+    .hero .logo svg { width: 26px; height: 26px; }
+    .hero h1 { font-size: 26px; margin-bottom: 6px; }
+    .hero p { margin: 0; color: var(--muted); font-size: 15px; max-width: 560px; }
+    .badge-on { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--primary); background: var(--primary-soft); padding: 3px 9px; border-radius: 999px; margin-bottom: 10px; }
+    .badge-on::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--primary); }
+    .news { padding: 14px 18px; margin-bottom: 24px; border-color: var(--primary); }
+    .news h2 { font-size: 14px; margin-bottom: 6px; }
+    .news ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
+    .news li + li { margin-top: 4px; }
+    section { margin-top: 32px; }
+    section > h2 { font-size: 17px; margin-bottom: 4px; }
+    section > p.lead { margin: 0 0 14px; color: var(--muted); font-size: 13.5px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .step { padding: 16px; }
+    .step .n { width: 24px; height: 24px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: grid; place-items: center; font-weight: 700; font-size: 12.5px; margin-bottom: 10px; }
+    .step b { display: block; margin-bottom: 4px; }
+    .step span { color: var(--muted); font-size: 13px; }
+    .try { padding: 16px; display: grid; gap: 12px; }
+    .try textarea { width: 100%; min-height: 84px; resize: vertical; font: inherit; font-size: 14px; color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; }
+    .samples { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 12.5px; color: var(--muted); }
+    .samples button { border: 1px solid var(--line); background: var(--soft); color: var(--fg); border-radius: 999px; padding: 4px 10px; font-size: 12.5px; cursor: pointer; }
+    .samples button:hover { filter: brightness(.97); }
+    .out { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .pane { border: 1px solid var(--line); border-radius: 9px; padding: 12px; min-height: 92px; }
+    .pane h3 { font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+    .pane .text { font-size: 13.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .ph { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; background: var(--warn-bg); color: var(--warn); padding: 0 4px; border-radius: 4px; }
+    .real { background: var(--primary-soft); color: var(--fg); padding: 0 3px; border-radius: 4px; border-bottom: 1px solid var(--primary); }
+    .found { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 12px; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--line); background: var(--soft); }
+    .tag.likely { background: var(--warn-bg); color: var(--warn); border-color: transparent; font-weight: 600; }
+    .empty { color: var(--muted); font-size: 13px; }
+    .sites { display: flex; flex-wrap: wrap; gap: 8px; }
+    .site { padding: 8px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--card); font-size: 13.5px; font-weight: 600; }
+    .privacy { padding: 4px 16px; }
+    .privacy .row { display: flex; gap: 12px; padding: 12px 0; align-items: flex-start; }
+    .privacy .row + .row { border-top: 1px solid var(--line); }
+    .privacy svg { width: 18px; height: 18px; color: var(--primary); flex: none; margin-top: 2px; }
+    .privacy b { display: block; font-size: 13.5px; }
+    .privacy span { color: var(--muted); font-size: 13px; }
+    .tip { padding: 14px 16px; display: flex; gap: 12px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .tip span { font-size: 13.5px; }
+    .tip span b { font-weight: 600; }
+    @media (max-width: 620px) { .steps, .out { grid-template-columns: 1fr; } .hero h1 { font-size: 22px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div>
+        <div class="badge-on" id="status">SentinelAI is on</div>
+        <h1>Send AI chatbots your questions, not your secrets</h1>
+        <p>SentinelAI checks each message before it reaches an AI chatbot and lets you swap passwords, keys, ID numbers and personal details for safe placeholders in one click. Everything happens on your device.</p>
+      </div>
+    </div>
+
+    <div class="card news" id="news" hidden>
+      <h2 id="newsTitle">What's new</h2>
+      <ul>
+        <li><b>Your real details come back in replies.</b> The AI sees <span class="ph">[PERSON_1]</span>; you see the real name in its answer, on your screen only.</li>
+        <li><b>Names, health, salary and confidential text</b> are now caught, in English and Hinglish.</li>
+        <li><b>Choose how careful it is:</b> Relaxed, Balanced or Strict in Settings. Unsure items are shown as "possible" and never stop your message.</li>
+      </ul>
+    </div>
+
+    <section>
+      <h2>How it works</h2>
+      <p class="lead">You keep using ChatGPT, Gemini or Claude exactly as before. SentinelAI only speaks up when something needs your attention.</p>
+      <div class="steps">
+        <div class="card step"><div class="n">1</div><b>Type as usual</b><span>Sensitive text is underlined as you type, and a small label shows how many items were found.</span></div>
+        <div class="card step"><div class="n">2</div><b>Review before it sends</b><span>If your message has something likely to be sensitive, it waits. Replace it, edit the message, or send anyway.</span></div>
+        <div class="card step"><div class="n">3</div><b>Get a normal answer</b><span>The AI only sees placeholders. Its reply shows your real details again, on your screen only.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Try it here</h2>
+      <p class="lead">Type or pick an example. This runs on this page only; nothing is sent anywhere.</p>
+      <div class="card try">
+        <div class="samples" role="group" aria-label="Examples">
+          <span>Examples:</span>
+          <button type="button" data-sample="0">A message to a friend</button>
+          <button type="button" data-sample="1">Debugging code</button>
+          <button type="button" data-sample="2">Hinglish</button>
+          <button type="button" data-sample="3">A general question</button>
+        </div>
+        <textarea id="input" aria-label="Try a message" spellcheck="false"></textarea>
+        <div class="found" id="found" aria-live="polite"></div>
+        <div class="out">
+          <div class="pane"><h3>What the AI receives</h3><div class="text" id="sent"></div></div>
+          <div class="pane"><h3>An AI reply, as you'd see it</h3><div class="text" id="reply"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Where it works</h2>
+      <p class="lead">On these sites in Chrome, Edge and Brave. You can switch any of them off in Settings.</p>
+      <div class="sites" id="sites"></div>
+    </section>
+
+    <section>
+      <h2>Your privacy</h2>
+      <p class="lead">A privacy tool shouldn't need your trust in yet another server, so SentinelAI doesn't have one.</p>
+      <div class="card privacy">
+        <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><div><b>Nothing leaves your device</b><span>Checking, replacing and restoring all happen in your browser. There is no server, account or analytics.</span></div></div>
+        <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h6"/></svg><div><b>Only counts are kept</b><span>Settings shows how many items were caught by type. The actual values are never saved.</span></div></div>
+        <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg><div><b>Placeholders are forgotten</b><span>Pairs like [PERSON_1] = your friend's name stay in memory only, and are wiped when you close the browser or click "Forget now".</span></div></div>
+        <div class="row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/></svg><div><b>One permission</b><span>SentinelAI only asks to save its own settings, and runs only on the five sites above.</span></div></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card tip">
+        <span><b>Tip:</b> pin SentinelAI to your toolbar (puzzle-piece icon, then the pin) to switch it on or off and see what it caught.</span>
+        <button class="btn primary" id="openSettings" type="button">Open settings</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="../src/settings.js"></script>
+  <script src="../src/data/names.js"></script>
+  <script src="../src/context.js"></script>
+  <script src="../src/detectors.js"></script>
+  <script src="welcome.js"></script>
+</body>
+</html>

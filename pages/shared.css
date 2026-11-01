@@ -1,0 +1,49 @@
+:root {
+  --bg: #f6f7f9; --card: #ffffff; --fg: #1f2328; --muted: #5d6670; --line: #e3e6ea; --soft: #f1f3f5;
+  --primary: #1b5e4b; --primary-soft: #e3f1ec; --primary-fg: #ffffff;
+  --warn: #b45309; --warn-bg: #fff4e0; --danger: #b42318;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #15171a; --card: #1d2024; --fg: #eceff2; --muted: #a2abb5; --line: #343a41; --soft: #262a2f;
+    --primary: #4fbf95; --primary-soft: #18352b; --primary-fg: #0d1a15;
+    --warn: #f5b041; --warn-bg: #3a2c12; --danger: #ff8a7a;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+h1, h2, h3 { margin: 0; line-height: 1.25; }
+button { font: inherit; }
+.muted { color: var(--muted); }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+
+/* switch */
+.switch { position: relative; display: inline-block; width: 38px; height: 22px; flex: none; }
+.switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.switch span {
+  position: absolute; inset: 0; border-radius: 999px; background: var(--line); cursor: pointer; transition: background .15s;
+}
+.switch span::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.25); transition: transform .15s;
+}
+.switch input:checked + span { background: var(--primary); }
+.switch input:checked + span::after { transform: translateX(16px); }
+.switch input:focus-visible + span { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+.btn {
+  border: 1px solid var(--line); background: var(--soft); color: var(--fg); border-radius: 9px;
+  padding: 8px 14px; font-weight: 600; cursor: pointer;
+}
+.btn:hover { filter: brightness(.97); }
+.btn.primary { background: var(--primary); color: var(--primary-fg); border-color: transparent; }
+.btn.danger { color: var(--danger); }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+.logo { width: 28px; height: 28px; border-radius: 8px; background: var(--primary); color: var(--primary-fg); display: grid; place-items: center; flex: none; }
+.logo svg { width: 17px; height: 17px; }

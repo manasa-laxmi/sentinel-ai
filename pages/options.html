@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SentinelAI settings</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wrap { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+    .top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .top h1 { font-size: 22px; }
+    .lead { margin: 0 0 24px; color: var(--muted); }
+    .welcome { padding: 16px 18px; margin-bottom: 20px; background: var(--primary-soft); border-color: transparent; }
+    .welcome h2 { font-size: 15px; margin-bottom: 4px; }
+    .welcome p { margin: 0; font-size: 13.5px; }
+    section { margin-bottom: 22px; }
+    section > h2 { font-size: 15px; margin: 0 0 4px; }
+    section > p { margin: 0 0 10px; font-size: 13px; color: var(--muted); }
+    .row { display: flex; align-items: center; gap: 14px; padding: 12px 16px; }
+    .row + .row { border-top: 1px solid var(--line); }
+    .row .text { flex: 1; min-width: 0; }
+    .row .text b { display: block; font-weight: 600; font-size: 13.5px; }
+    .row .text small { color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    .grid .row { border-top: 1px solid var(--line); }
+    .grid .row:nth-child(-n+1) { border-top: 0; }
+    @media (min-width: 560px) { .grid .row:nth-child(2) { border-top: 0; } .grid .row:nth-child(even) { border-left: 1px solid var(--line); } }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; background: var(--soft); padding: 1px 5px; border-radius: 5px; }
+    input[type=text], textarea {
+      width: 100%; font: inherit; font-size: 13.5px; color: var(--fg); background: var(--card);
+      border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
+    }
+    textarea { min-height: 96px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+    .rule { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 8px; align-items: center; padding: 12px 16px; }
+    .rule + .rule { border-top: 1px solid var(--line); }
+    .rules-empty { padding: 14px 16px; color: var(--muted); font-size: 13px; }
+    .add { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; padding: 14px 16px; border-top: 1px solid var(--line); }
+    .add .full { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .err { color: var(--danger); font-size: 12.5px; }
+    .ok { color: var(--primary); font-size: 12.5px; }
+    .pad { padding: 14px 16px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .stat { padding: 14px 16px; }
+    .stat + .stat { border-left: 1px solid var(--line); }
+    .stat b { font-size: 24px; display: block; font-variant-numeric: tabular-nums; }
+    .stat span { font-size: 12px; color: var(--muted); }
+    .bytype { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+    .levels { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .level { display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; cursor: pointer; }
+    .level + .level { border-left: 1px solid var(--line); }
+    .level input { margin-top: 3px; accent-color: var(--primary); }
+    .level b { display: block; font-size: 13.5px; }
+    .level small { color: var(--muted); font-size: 12px; }
+    .level:has(input:checked) { background: var(--primary-soft); }
+    .level:first-child { border-radius: 12px 0 0 12px; } .level:last-child { border-radius: 0 12px 12px 0; }
+    h3.group { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 14px 0 6px; font-weight: 600; }
+    .saved { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 9px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+    .saved.show { opacity: 1; }
+    @media (max-width: 560px) { .levels { grid-template-columns: 1fr; } .level + .level { border-left: 0; border-top: 1px solid var(--line); } .level:first-child, .level:last-child { border-radius: 0; } .rule, .add { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr; } .stat + .stat { border-left: 0; border-top: 1px solid var(--line); } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h1>SentinelAI settings</h1>
+    </div>
+    <p class="lead">SentinelAI checks your messages on your own device before they reach an AI chatbot. Nothing you type is stored or sent anywhere. <a href="welcome.html">How it works</a></p>
+
+    <section>
+      <h2>How it behaves</h2>
+      <div class="card">
+        <div class="row">
+          <div class="text"><b>Check before sending</b><small>Hold a message with sensitive info until you decide what to do.</small></div>
+          <label class="switch"><input type="checkbox" id="checkOnSend"><span></span></label>
+        </div>
+        <div class="row">
+          <div class="text"><b>Warn me while I type</b><small>Show a small label and underline sensitive text as you type.</small></div>
+          <label class="switch"><input type="checkbox" id="liveWarnings"><span></span></label>
+        </div>
+        <div class="row">
+          <div class="text"><b>Show my real details in replies</b><small>The AI sees [PERSON_1]; you see the real name in its reply. Kept in memory only and forgotten when you close the browser.</small></div>
+          <label class="switch"><input type="checkbox" id="restoreReplies"><span></span></label>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>How careful should it be?</h2>
+      <p>Applies to names, health, money and confidential text. Passwords, keys and ID numbers are always checked.</p>
+      <div class="card levels" role="radiogroup" aria-label="Sensitivity">
+        <label class="level"><input type="radio" name="sensitivity" value="relaxed"><span><b>Relaxed</b><small>Only flag things it's sure about.</small></span></label>
+        <label class="level"><input type="radio" name="sensitivity" value="balanced"><span><b>Balanced</b><small>Recommended. Shows "possible" items without stopping your message.</small></span></label>
+        <label class="level"><input type="radio" name="sensitivity" value="strict"><span><b>Strict</b><small>Flag anything that might be personal, including single first names.</small></span></label>
+      </div>
+    </section>
+
+    <section>
+      <h2>Sites</h2>
+      <p>SentinelAI only runs on these sites.</p>
+      <div class="card grid" id="sites"></div>
+    </section>
+
+    <section>
+      <h2>What to look for</h2>
+      <p>Turn off anything you're comfortable sharing.</p>
+      <h3 class="group">Personal details</h3>
+      <div class="card grid" id="contextDetectors"></div>
+      <h3 class="group">Passwords, keys and ID numbers</h3>
+      <div class="card grid" id="detectors"></div>
+    </section>
+
+    <section>
+      <h2>Confidential names</h2>
+      <p>Project, product or client names that shouldn't leave your company. One per line.</p>
+      <div class="card pad">
+        <textarea id="projectTerms" spellcheck="false" placeholder="Project Falcon"></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Your own rules</h2>
+      <p>Catch things specific to you or your work, like employee IDs or project code names. Uses a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions/Cheatsheet" target="_blank" rel="noopener">regular expression</a> or plain text.</p>
+      <div class="card">
+        <div id="rules"></div>
+        <form class="add" id="addRule" autocomplete="off">
+          <input type="text" id="ruleLabel" placeholder="Name, e.g. Employee ID" aria-label="Rule name" required>
+          <input type="text" id="rulePattern" placeholder="Pattern, e.g. EMP-\d{6} or Project Falcon" aria-label="Pattern" required>
+          <div class="full">
+            <label style="display:flex;gap:6px;align-items:center;font-size:13px"><input type="checkbox" id="ruleExact"> Treat as plain text (not a pattern)</label>
+            <span style="flex:1"></span>
+            <span id="ruleMsg"></span>
+            <button class="btn primary" type="submit">Add rule</button>
+          </div>
+          <div class="full"><input type="text" id="ruleTest" placeholder="Try it: type a sample sentence here" aria-label="Test text"></div>
+        </form>
+      </div>
+    </section>
+
+    <section>
+      <h2>Always allowed</h2>
+      <p>Values that are fine to share, like your work email. One per line.</p>
+      <div class="card pad">
+        <textarea id="allowlist" spellcheck="false" placeholder="team@mycompany.com"></textarea>
+      </div>
+    </section>
+
+    <section>
+      <h2>Your activity</h2>
+      <p>Only counts are kept, on this device. The actual values are never saved.</p>
+      <div class="card">
+        <div class="stats">
+          <div class="stat"><b id="sFound">0</b><span>items caught</span></div>
+          <div class="stat"><b id="sReplaced">0</b><span>messages cleaned</span></div>
+          <div class="stat"><b id="sAnyway">0</b><span>sent anyway</span></div>
+        </div>
+        <div class="bytype" id="sByType">Nothing caught yet.</div>
+        <div class="pad" style="border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <small class="muted" id="sSince"></small>
+          <button class="btn danger" id="resetStats" type="button">Reset counts</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="saved" id="saved" role="status">Saved</div>
+
+  <script src="../src/settings.js"></script>
+  <script src="../src/data/names.js"></script>
+  <script src="../src/context.js"></script>
+  <script src="../src/detectors.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
