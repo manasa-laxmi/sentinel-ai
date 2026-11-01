@@ -12,7 +12,26 @@ Works on **ChatGPT, Gemini, Claude, Perplexity and Microsoft Copilot**, in Chrom
 - **Your own rules:** add patterns for things like employee IDs or project code names.
 - **Activity:** counts of what was caught, kept on your device. The actual values are never stored.
 
+## Reversible placeholders
+
+When you replace "Rahul Sharma" with `[PERSON_1]`, the AI only ever sees `[PERSON_1]`. When its reply comes back, SentinelAI shows "Rahul Sharma" again on your screen, with a light green underline. Placeholders are numbered for the whole conversation, so `[PERSON_1]` always means the same person. The pairs are kept in memory only (`chrome.storage.session`) and are forgotten when you close the browser, or straight away with "Forget now" in the popup. Turn it off in Settings under "Show my real details in replies".
+
 ## What it detects
+
+### Personal details (context-aware)
+
+| Type | How it decides |
+|---|---|
+| Names | Cue phrases in English and Hinglish ("my manager …", "mera naam …", "Dear …", sign-offs, "Priya ka number"), Indian and international name lists. Public figures, mythology and book/film titles are not flagged unless linked to the user. |
+| Health information | Only when tied to a person ("my dad has diabetes", "mujhe thyroid hai"). Questions like "what is diabetes?" are ignored. |
+| Salary and money | A personal amount ("my CTC is 18 LPA", "meri salary 45k hai", credit score). Market questions ("average salary for…") are ignored. |
+| Confidential text | Paragraphs marked confidential, internal only, under NDA, "sirf internal" …, plus your own list of project names. |
+
+Each item gets a confidence score. **Relaxed / Balanced / Strict** in settings decides what is shown and what is pre-ticked. On Balanced, uncertain items appear as "Possible" and never stop your message. A health or money detail becomes blocking when the same message also identifies someone. Names are replaced with numbered placeholders (`[PERSON_1]`, `[PERSON_2]`) so the AI's reply still makes sense.
+
+Accuracy and how it was measured: [`test/eval/RESULTS.md`](test/eval/RESULTS.md).
+
+### Passwords, keys and ID numbers
 
 | Type | How false alarms are avoided |
 |---|---|
@@ -42,10 +61,13 @@ Works on **ChatGPT, Gemini, Claude, Perplexity and Microsoft Copilot**, in Chrom
 ```
 manifest.json          MV3, only the "storage" permission
 src/
-  detectors.js         detection engine — returns exact text spans, resolves overlaps
+  detectors.js         detection engine — exact text spans, confidence scores, overlaps
+  context.js           names, health, money, confidential (rules layer)
+  data/names.js        name lists, public figures
   adapters.js          per-site selectors for the message box and send button
   editor.js            reads/edits rich editors (ProseMirror, Quill, Lexical) safely
   ui.js                chip, review dialog, highlights (inside Shadow DOM)
+  vault.js             reversible placeholders: numbering, memory-only pairs, restoring replies
   content.js           ties it together: live scan + holding the message on send
   settings.js          settings and counts in chrome.storage.local
   background.js        opens the welcome page on install
@@ -64,6 +86,7 @@ Key design choices:
 
 ```
 node test/detectors.test.js
+node test/eval/run.js holdout balanced --verbose
 ```
 
 Runs 47 checks: 26 prompts that should be caught, 17 that should not (order IDs, version numbers, timestamps, "the password is incorrect" …), and behaviour checks for sanitising, the allowlist, toggles and custom rules.
@@ -73,9 +96,10 @@ Runs 47 checks: 26 prompts that should be caught, 17 that should not (order IDs,
 ## Known limits
 
 - AI sites change their markup often. If one stops being protected, update its selectors in `src/adapters.js`.
-- Names, addresses and other free-form personal details aren't detected yet — that's Phase 3 (on-device NER).
+- Names not in the word lists and without a cue phrase are often missed. The optional on-device model (next step) targets this.
+- Addresses and dates of birth aren't detected yet.
 - Files and images attached to a chat aren't scanned yet.
 
 ## Roadmap
 
-- **Phase 3:** on-device NER for names and addresses, context-aware detection, file scanning, sensitivity levels, reversible placeholders (`[EMAIL_1]` swapped back in the AI's reply), local dashboard.
+- **Phase 3 (in progress):** rules layer for names, health, money and confidential text · sensitivity levels · numbered placeholders · reversible placeholders · future: optional on-device model, file scanning, local dashboard.
