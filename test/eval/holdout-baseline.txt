@@ -1,0 +1,11 @@
+
+holdout set · 62 prompts · sensitivity: balanced
+
+category       caught  missed  false alarms  recall  precision  held on send
+person             15      11             0     58%       100%           53%
+health              7       0             2    100%        78%           14%
+financial           6       2             0     75%       100%           17%
+confidential        3       0             0    100%       100%          100%
+ALL                31      13             2     70%        94%           42%
+
+prompts with nothing sensitive: 26 · interrupted on send: 0 (0%) · showed a possible item: 1

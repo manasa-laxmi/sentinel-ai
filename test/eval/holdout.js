@@ -1,0 +1,75 @@
+// Holdout set: written AFTER the rules were tuned on dev.js, and not used for tuning.
+// Deliberately includes names outside the word lists, casual typing, typos and long messages.
+module.exports = [
+  // ---------- names ----------
+  ["can u help me write a msg to thejas gowda, my teammate, about the sprint delay", [["person", "thejas gowda"]]],
+  ["My mentor Lalitha Venkatraman suggested I apply to the APM program. Write a thank you note", [["person", "Lalitha Venkatraman"]]],
+  ["Write a LinkedIn recommendation for Oluwaseun Adeyemi who was my intern", [["person", "Oluwaseun Adeyemi"]]],
+  ["pls fix grammar: me and Bhuvan went to meet the vendor Mr. Kothari yesterday", [["person", "Bhuvan"], ["person", "Kothari"]]],
+  ["Forwarding from my HOD Dr. Rangarajan: submit lab records by Friday. Make it a WhatsApp announcement", [["person", "Rangarajan"]]],
+  ["Hey Zubin,\n\nAttaching the contract. Let me know.\n\nCheers,\nNaomi", [["person", "Zubin"], ["person", "Naomi"]]],
+  ["candidate: Srushti Pawar, 2 yrs exp, react + node. write a rejection email", [["person", "Srushti Pawar"]]],
+  ["my neighbour Gurdeep uncle keeps parking in my spot, draft a polite note", [["person", "Gurdeep"]]],
+  ["Hi I'm Esha and I run a small bakery in Indore, help me with instagram captions", [["person", "Esha"]]],
+  ["our customer Mrs. Fernandes wants a refund for order 44821, write a response", [["person", "Fernandes"]]],
+  ["Write meeting notes: attendees were Kunal Bose, Ritika Sen and me", [["person", "Kunal Bose"], ["person", "Ritika Sen"]]],
+  ["my cofounder Yash and I disagree on pricing, help us structure the discussion", [["person", "Yash"]]],
+  ["Prepare a performance review for Ayesha Khan, she exceeded targets by 30%", [["person", "Ayesha Khan"]]],
+  ["mere chacha Bhupinder Singh ka visa reject ho gaya, appeal letter likhna hai", [["person", "Bhupinder Singh"]]],
+  ["Lavanya ka email lavanya.r@outlook.com hai, isko formal invite bhejo", [["person", "Lavanya"]]],
+  ["tell my dad Prakash that the car service is due — make it sound casual", [["person", "Prakash"]]],
+  ["i need to sue my contractor Vijay Raghavan for incomplete work, what are the steps", [["person", "Vijay Raghavan"]]],
+  ["Rewrite: 'Shalini will cover for Manoj during his leave'", [["person", "Shalini"], ["person", "Manoj"]]],
+  ["Sent by Keerthana S, Accounts Dept. Please make this email shorter", [["person", "Keerthana S"]]],
+  ["wish my bestie Ira a happy bday in gen z style", [["person", "Ira"]]],
+
+  // ---------- names: should NOT be flagged ----------
+  ["Analyse the character of Draupadi in the Mahabharata", []],
+  ["What made Ratan Tata a respected business leader?", []],
+  ["Summarise Rohit Sharma's captaincy record in T20s", []],
+  ["Write a review of the movie Rocky Aur Rani", []],
+  ["Plan a 3 day trip to Jaipur and Udaipur", []],
+  ["How does Kubernetes handle pod scheduling?", []],
+  ["Explain Kalman filters simply", []],
+  ["Is Victoria Memorial open on Mondays?", []],
+  ["What did Ambedkar contribute to the Indian constitution?", []],
+  ["Tell me about the Taj Mahal's architecture", []],
+  ["I'm stuck on this LeetCode problem, give me a hint", []],
+  ["Make a study plan for GATE CSE in 6 months", []],
+  ["Hello there, how are you doing today?", []],
+  ["Write a story about a robot named Pixel who learns to paint", []],
+  ["Compare Swiggy and Zomato business models", []],
+
+  // ---------- health ----------
+  ["my wife has gestational diabetes, what snacks are ok in the 3rd trimester", [["health", "diabetes"]]],
+  ["I was diagnosed with hypothyroidism, should I avoid soy?", [["health", "hypothyroidism"]]],
+  ["meri nani ko dementia hai, unka dhyan kaise rakhein", [["health", "dementia"]]],
+  ["I've had migraines for 3 weeks, what could be triggering them", [["health", "migraines"]]],
+  ["Write a sick leave email: I tested positive for covid and need 5 days", [["health", "covid"]]],
+  ["Our employee Farhan Ali is in rehab for alcoholism, how do we support his return?", [["person", "Farhan Ali"], ["health", "alcoholism"]]],
+  ["my brother is bipolar and stopped his meds, how can I help", [["health", "bipolar"]]],
+  ["What are early signs of Parkinson's?", []],
+  ["Write a blog post on managing PCOS through diet", []],
+  ["Brown sugar vs white sugar for cookies?", []],
+  ["Create flashcards on kidney stones for my MBBS exam", []],
+  ["How do vaccines protect against hepatitis B?", []],
+
+  // ---------- money ----------
+  ["I make 1.2 lakh a month after tax, how should I split between SIP and PPF", [["financial", "1.2 lakh"]]],
+  ["got an offer for 32 LPA but my current is 21, is a 50% hike normal", [["financial", "32 LPA"], ["financial", "21"]]],
+  ["mera cibil 690 hai, credit card milega kya", [["financial", "690"]]],
+  ["My savings are around ₹3.4L, should I buy a bike or keep an emergency fund?", [["financial", "₹3.4L"]]],
+  ["Anil Kapoor (not the actor) in my team earns 14 LPA, is that fair for his level?", [["person", "Anil Kapoor"], ["financial", "14 LPA"]]],
+  ["my monthly rent is 22000 and salary 70000, am I overspending?", [["financial", "22000"], ["financial", "70000"]]],
+  ["What's the median salary for UX designers in Hyderabad?", []],
+  ["How are income tax slabs calculated under the new regime?", []],
+  ["Write a budget template for a college student", []],
+  ["Price of gold today is 7,200 per gram, explain why it is rising", []],
+
+  // ---------- confidential ----------
+  ["Proprietary & confidential. Our churn model uses these 12 features: ... Can you suggest improvements?", [["confidential", "Proprietary & confidential. Our churn model uses these 12 features: ... Can you suggest improvements?"]]],
+  ["Not for distribution: draft org chart after the merger. Turn this into a table", [["confidential", "Not for distribution: draft org chart after the merger. Turn this into a table"]]],
+  ["kisi ko mat batana, hum next month 3 log hire kar rahe hain. JD likho", [["confidential", "kisi ko mat batana, hum next month 3 log hire kar rahe hain. JD likho"]]],
+  ["What is the difference between confidential and secret classification?", []],
+  ["Write a confidentiality notice for my email signature", []]
+];

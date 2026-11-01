@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../src/highlight.css">
+<style>body{font:15px system-ui;padding:120px 40px}#box{border:1px solid #ccc;min-height:60px;padding:8px;width:600px}textarea{width:600px;height:60px}</style>
+<script>
+  // test-only: chrome API stub + open shadow roots so the test can inspect the UI
+  window.chrome = undefined;
+  const o = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function (i) { return o.call(this, Object.assign({}, i, { mode: "open" })); };
+  window.SENT = [];
+</script>
+</head><body>
+<div id="composerWrap">
+  <div id="prompt-textarea" contenteditable="true"><p><br></p></div>
+  <button data-testid="send-button" id="send">Send</button>
+</div>
+<textarea id="ta" style="display:none"></textarea>
+<div id="thread"></div>
+<script>
+  const box = document.getElementById("prompt-textarea");
+  function readBox(){ return [...box.querySelectorAll("p")].map(p=>p.textContent).join("\n"); }
+  function send(){ const t = box.style.display==="none" ? document.querySelector("textarea").value : readBox(); SENT.push(t); }
+  document.getElementById("send").addEventListener("click", send);
+  box.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } });
+</script>
+<script src="../../src/settings.js"></script>
+<script>SentinelSettings.siteForHost = () => SentinelSettings.SITES[0];</script>
+<script src="../../src/data/names.js"></script>
+<script src="../../src/context.js"></script>
+<script src="../../src/detectors.js"></script>
+<script src="../../src/adapters.js"></script>
+<script src="../../src/editor.js"></script>
+<script src="../../src/ui.js"></script>
+<script src="../../src/vault.js"></script>
+<script src="../../src/content.js"></script>
+</body></html>
