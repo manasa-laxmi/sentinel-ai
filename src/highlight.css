@@ -1,0 +1,8 @@
+/* Underline sensitive values inside the AI site's message box (CSS Custom Highlight API).
+   This only paints over text; it never changes the page's markup. */
+::highlight(sentinel-sensitive) {
+  background-color: rgba(245, 158, 11, 0.28);
+  text-decoration: underline wavy rgba(217, 119, 6, 0.9);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
