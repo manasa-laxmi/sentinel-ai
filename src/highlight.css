@@ -1,0 +1,23 @@
+/* Underline sensitive values inside the AI site's message box (CSS Custom Highlight API).
+   This only paints over text; it never changes the page's markup. */
+::highlight(sentinel-sensitive) {
+  background-color: rgba(245, 158, 11, 0.28);
+  text-decoration: underline wavy rgba(217, 119, 6, 0.9);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* lower-confidence items: a lighter dotted underline */
+::highlight(sentinel-sensitive-possible) {
+  text-decoration: underline dotted rgba(120, 120, 120, 0.8);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* real values SentinelAI put back into the AI's reply (shown on this screen only) */
+::highlight(sentinel-restored) {
+  background-color: rgba(46, 160, 110, 0.16);
+  text-decoration: underline solid rgba(46, 160, 110, 0.75);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
