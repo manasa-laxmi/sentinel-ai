@@ -99,7 +99,3 @@ Runs 47 checks: 26 prompts that should be caught, 17 that should not (order IDs,
 - Names not in the word lists and without a cue phrase are often missed. The optional on-device model (next step) targets this.
 - Addresses and dates of birth aren't detected yet.
 - Files and images attached to a chat aren't scanned yet.
-
-## Roadmap
-
-- **Phase 3 (in progress):** rules layer for names, health, money and confidential text · sensitivity levels · numbered placeholders · reversible placeholders · future: optional on-device model, file scanning, local dashboard.
