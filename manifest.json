@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "SentinelAI",
-  "version": "2.0.0",
-  "description": "Stops passwords, API keys, card numbers and other personal data from reaching AI chatbots. Runs entirely on your device.",
+  "version": "3.1.2",
+  "description": "Stops passwords, API keys, card numbers, names and other personal data from reaching AI chatbots. Runs entirely on your device.",
   "permissions": ["storage"],
   "background": { "service_worker": "src/background.js" },
   "action": {
@@ -25,10 +25,13 @@
       ],
       "js": [
         "src/settings.js",
+        "src/data/names.js",
+        "src/context.js",
         "src/detectors.js",
         "src/adapters.js",
         "src/editor.js",
         "src/ui.js",
+        "src/vault.js",
         "src/content.js"
       ],
       "css": ["src/highlight.css"],
